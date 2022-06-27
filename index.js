@@ -1,4 +1,3 @@
-// in a new folder be sure to run "npm init -y" and "npm install puppeteer"
 const puppeteer = require("puppeteer");
 const fs = require("fs/promises");
 
@@ -8,13 +7,18 @@ async function start() {
     slowMo: 250,
     devtools: true,
   });
+
+  
   const page = await browser.newPage();
 
   const client = await page.target().createCDPSession();
   const context = browser.defaultBrowserContext();
+
+
   await context.overridePermissions("https://food.grab.com/sg/en/restaurants", [
     "geolocation",
   ]);
+
 
   await client.send("Emulation.setGeolocationOverride", {
     latitude: 90,
@@ -22,7 +26,10 @@ async function start() {
     accuracy: 100,
   });
 
+
+
   await page.goto("https://food.grab.com/sg/en/restaurants");
+
 
   const result = await page.evaluate(() => {
     return new Promise((resolve) => {
@@ -34,8 +41,14 @@ async function start() {
       });
     });
   });
+
+
   console.log(result);
+
+
   await browser.close();
+
+
 }
 
 start();
